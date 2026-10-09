@@ -156,7 +156,7 @@ For vulnerability reports and guidance on sharing diagnostic information, see [S
 
 ## License
 
-This repository does not currently include a `LICENSE` file. Public visibility does not grant permission to copy, modify, or redistribute the code beyond what applicable law permits. Contact the repository owner if you need permission.
+This project is licensed under the [MIT License](LICENSE). You may use, modify, and redistribute it, including commercially, provided you retain the copyright and license notice. The software is provided without warranty.
 
 </details>
 
@@ -318,6 +318,6 @@ python -m pytest
 
 ## 许可证
 
-当前仓库未附带 `LICENSE` 文件。公开可见不代表获得复制、修改或再分发许可；如需使用许可，请联系仓库所有者。
+本项目采用 [MIT 许可证](LICENSE)。你可以使用、修改和再分发项目，包括商业用途，但须保留版权和许可证声明。软件按“原样”提供，不附带担保。
 
 </details>
