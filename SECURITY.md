@@ -5,21 +5,29 @@ Choose a language / 选择语言：
 <details>
 <summary><strong>English (EN)</strong></summary>
 
-Please do not post tokens, API keys, databases, private configuration, logs, user reports, or other user data in Issues or public discussions.
+## Report a vulnerability
 
-If you discover a security issue, report it through a private channel provided by the maintainer and include only the minimum information needed to reproduce it. Before submitting a change, verify that `.env`, databases, backups, reports, and logs are not tracked by Git.
+If the repository's **Security** tab offers **Report a vulnerability**, use it to send details privately. Otherwise, open an Issue requesting a private way to contact the repository owner. Do not include exploit steps, credentials, or user data in a public Issue.
 
-The external database adapters, cross-bot protocols, and avatar segmentation worker are intentionally outside this public release and should remain in private deployment infrastructure.
+Include the affected component, what you observed, and the minimum steps needed to reproduce the problem. Remove tokens, API keys, Discord IDs, database contents, and personal information from screenshots and logs before sharing them.
+
+## Protect your deployment
+
+Keep `DISCORD_TOKEN` and `OPENAI_API_KEY` in a local `.env` file or your deployment's secret store. Do not commit `.env`, SQLite databases, backups, generated reports, or logs. If a credential is exposed, revoke or rotate it with its provider.
 
 </details>
 
 <details>
 <summary><strong>中文 (CN)</strong></summary>
 
-请不要在 Issue 或公开讨论中提交 Token、API Key、数据库、私有配置、日志、用户报告或其他用户数据。
+## 报告安全问题
 
-如果发现安全问题，请通过维护者提供的私下渠道报告，并附上复现所需的最小信息。提交变更前，请确认 `.env`、数据库、备份、报告和日志均未进入 Git。
+如果仓库的 **Security** 页面提供 **Report a vulnerability**，请通过该入口私下提交详情。若没有该入口，请创建一个 Issue 请求与仓库所有者私下联系；公开 Issue 中不要放入漏洞利用步骤、凭据或用户数据。
 
-外部数据库适配器、跨机器人协议和头像分割 Worker 不属于公开版，应继续保留在私有部署环境中。
+报告中请写明受影响的组件、观察到的现象和最少的复现步骤。分享截图或日志前，请移除 Token、API Key、Discord ID、数据库内容及个人信息。
+
+## 保护自己的部署
+
+将 `DISCORD_TOKEN` 和 `OPENAI_API_KEY` 保存在本地 `.env` 或部署平台的密钥存储中。不要提交 `.env`、SQLite 数据库、备份、生成的报告或日志。如果凭据泄露，请到对应服务提供方撤销或轮换。
 
 </details>

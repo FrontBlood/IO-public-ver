@@ -7,7 +7,7 @@ Choose a language / 选择语言：
 
 A Python Discord bot for community progression, check-ins, virtual currency, shops, drops, achievements, onboarding, private voice rooms, Avalon, OMG screenshot analysis, and optional image scam moderation.
 
-This repository is a public source release for review and further development. It does not include server data, real credentials, or the original deployment environment. You must configure it for your own Discord server before running it.
+The repository contains source code and example configuration. To run the bot, provide your own Discord token and server IDs.
 
 ## Features
 
@@ -70,7 +70,7 @@ python bot.py
 
 ## Initial configuration
 
-Server-specific IDs in this public release have been replaced with `0` placeholders. Before starting the bot, replace them with IDs from your own server or disable the modules you do not use.
+Server-specific IDs are set to `0` placeholders. Replace them with IDs from your server before using the related features.
 
 ### Configuration files to review
 
@@ -109,9 +109,9 @@ Do not commit databases, logs, backups, or user activity reports. In production,
 
 ### Image scam moderation
 
-When enabled, image attachments are downloaded, resized, converted to JPEG, and sent to the OpenAI API for classification. A matching message may be deleted, its author may be temporarily timed out, and recent messages may be cleaned up. Review your server's privacy policy and grant the bot the required permissions before enabling this feature.
+If an `OPENAI_API_KEY` is configured, image attachments in monitored channels are downloaded, resized, converted to JPEG, and sent to the OpenAI API for classification. Image content is not anonymized before transmission. A matching message may be deleted, its author may be temporarily timed out, and recent messages may be cleaned up. Review your server's privacy policy and grant the bot the required permissions before enabling this feature. By default, the monitored-channel list is empty, which covers all channels except any explicitly excluded channels.
 
-This public release does not provide the external MySQL economy system, cross-bot economy protocol, database import tools, or avatar segmentation worker from the private deployment. Those components are not started by this repository. If you need similar functionality, implement and operate it separately with private service credentials.
+The included economy uses local SQLite databases. External MySQL integration, cross-bot transfers, database import tools, and avatar segmentation are not available in this repository.
 
 ## Common commands
 
@@ -147,15 +147,15 @@ python -m pytest
 
 Before using the bot in production, test it in a separate Discord server and verify permissions, role ordering, channel IDs, database backups, and automated cleanup behavior.
 
-## Public-release scope
+## Project scope
 
-This is a runnable foundation for review and adaptation, not a zero-configuration hosted service. Every Discord server has different channels, roles, permissions, and privacy requirements, so deployment owners must complete their own configuration and review.
+This is source code for a self-hosted Discord bot. Configure its channels, roles, permissions, and privacy settings for your server before use.
 
-Do not submit tokens, API keys, databases, backups, logs, user reports, or real server configuration in Issues or Pull Requests. For security reports, see [SECURITY.md](SECURITY.md) and use a private reporting channel.
+For vulnerability reports and guidance on sharing diagnostic information, see [SECURITY.md](SECURITY.md).
 
 ## License
 
-This repository currently does not include a `LICENSE` file. Public visibility alone does not grant additional permission to copy, modify, or redistribute the code. If you want external users to reuse the project, add an appropriate open-source license or contact the maintainer about the intended permission scope.
+This repository does not currently include a `LICENSE` file. Public visibility does not grant permission to copy, modify, or redistribute the code beyond what applicable law permits. Contact the repository owner if you need permission.
 
 </details>
 
@@ -166,7 +166,7 @@ This repository currently does not include a `LICENSE` file. Public visibility a
 
 这是一个面向 Discord 社区的 Python 机器人，提供社区成长、签到、晶核经济、商店、掉落、成就、迎新、私房语音频道、阿瓦隆和 OMG 截图分析等功能。
 
-本仓库是面向公开查看和二次开发的源码版本，不包含服务器数据、真实凭据或原部署环境。首次运行前必须完成自己的 Discord 服务器配置。
+仓库提供源代码和示例配置。运行机器人时，需要填写自己的 Discord Token 和服务器 ID。
 
 ## 功能概览
 
@@ -231,7 +231,7 @@ python bot.py
 
 ## 首次配置
 
-公开版已将服务器相关 ID 替换为 `0` 占位值。启动前请替换为自己服务器的 ID，或关闭不使用的模块。
+服务器相关 ID 当前为 `0` 占位值。使用对应功能前，请替换为自己服务器的 ID。
 
 ### 需要检查的配置文件
 
@@ -270,9 +270,9 @@ OPENAI_API_KEY=
 
 ### 图片反诈审查
 
-启用后，带图片的消息会被下载、缩放、转换为 JPEG，并发送到 OpenAI API 分类。命中规则的消息可能被删除，发送者可能被临时禁言，近期消息也可能被清理。启用前请确认符合服务器隐私政策，并授予机器人所需权限。
+配置 `OPENAI_API_KEY` 后，受监控频道中的图片附件会被下载、缩放、转换为 JPEG，并发送到 OpenAI API 分类。发送前不会对图片内容做匿名化处理。命中规则的消息可能被删除，发送者可能被临时禁言，近期消息也可能被清理。启用前请确认符合服务器隐私政策，并授予机器人所需权限。默认监控频道列表为空，表示覆盖所有未被明确排除的频道。
 
-本公开版不包含外部 MySQL 经济系统、跨机器人经济协议、数据库导入工具和头像分割审查 Worker。这些组件不会由本仓库启动；如需类似能力，请单独实现，并将服务凭据保存在私有部署环境中。
+仓库内的经济系统使用本地 SQLite 数据库；不提供外部 MySQL 对接、跨机器人转账、数据库导入工具或头像分割功能。
 
 ## 常用指令
 
@@ -308,14 +308,14 @@ python -m pytest
 
 正式使用前，建议在单独的测试服务器验证权限、身份组顺序、频道 ID、数据库备份和自动清理行为。
 
-## 公开版边界
+## 项目范围
 
-这是一个可运行、供查看和二次开发的基础源码版本，不是零配置的托管服务。每个 Discord 服务器的频道、身份组、权限和隐私要求都不同，部署者需要自行完成配置和审查。
+这是一个可自行托管的 Discord 机器人源码项目。使用前请按照自己服务器的频道、身份组、权限和隐私要求完成配置。
 
-不要在 Issue 或 Pull Request 中提交 Token、API Key、数据库、备份、日志、用户报告或真实服务器配置。安全问题请参考 [SECURITY.md](SECURITY.md)，通过私下渠道报告。
+漏洞报告方式及分享诊断信息时的注意事项，请参阅 [SECURITY.md](SECURITY.md)。
 
 ## 许可证
 
-当前仓库未附带 `LICENSE` 文件。公开访问本身不代表自动授予复制、修改或再分发权限。如果希望外部用户复用项目，请补充合适的开源许可证，或联系维护者确认授权范围。
+当前仓库未附带 `LICENSE` 文件。公开可见不代表获得复制、修改或再分发许可；如需使用许可，请联系仓库所有者。
 
 </details>
