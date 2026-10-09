@@ -1,0 +1,7 @@
+discord.py[voice]>=2.7.1
+edge-tts
+python-dotenv
+aiohttp
+Pillow
+numpy
+onnxruntime
