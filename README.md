@@ -1,5 +1,10 @@
 # Relic Bot
 
+Choose a language / 选择语言：
+
+<details>
+<summary><strong>English (EN)</strong></summary>
+
 A Python Discord bot for community progression, check-ins, virtual currency, shops, drops, achievements, onboarding, private voice rooms, Avalon, OMG screenshot analysis, and optional image scam moderation.
 
 This repository is a public source release for review and further development. It does not include server data, real credentials, or the original deployment environment. You must configure it for your own Discord server before running it.
@@ -152,8 +157,10 @@ Do not submit tokens, API keys, databases, backups, logs, user reports, or real 
 
 This repository currently does not include a `LICENSE` file. Public visibility alone does not grant additional permission to copy, modify, or redistribute the code. If you want external users to reuse the project, add an appropriate open-source license or contact the maintainer about the intended permission scope.
 
+</details>
+
 <details>
-<summary>中文附录</summary>
+<summary><strong>中文 (CN)</strong></summary>
 
 ## 项目简介
 

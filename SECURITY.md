@@ -1,15 +1,20 @@
 # Security Policy
 
+Choose a language / 选择语言：
+
+<details>
+<summary><strong>English (EN)</strong></summary>
+
 Please do not post tokens, API keys, databases, private configuration, logs, user reports, or other user data in Issues or public discussions.
 
 If you discover a security issue, report it through a private channel provided by the maintainer and include only the minimum information needed to reproduce it. Before submitting a change, verify that `.env`, databases, backups, reports, and logs are not tracked by Git.
 
 The external database adapters, cross-bot protocols, and avatar segmentation worker are intentionally outside this public release and should remain in private deployment infrastructure.
 
-<details>
-<summary>中文附录</summary>
+</details>
 
-# 安全策略
+<details>
+<summary><strong>中文 (CN)</strong></summary>
 
 请不要在 Issue 或公开讨论中提交 Token、API Key、数据库、私有配置、日志、用户报告或其他用户数据。
 
