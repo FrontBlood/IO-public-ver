@@ -18,7 +18,7 @@ The repository contains source code and example configuration. To run the bot, p
 - **Games**: Avalon lobby creation, test mode, player statistics, and leaderboards.
 - **Content processing**: OMG skill-screen analysis and optional OpenAI image scam moderation.
 
-Use `&帮助` or `&菜单` in Discord to view the commands available to the current account. The default command prefix is `&`.
+Use `&帮助` or `&菜单` in Discord for the built-in command menu. It is not a complete list of every command. The default command prefix is `&`.
 
 ## Requirements
 
@@ -93,7 +93,7 @@ DISCORD_TOKEN=
 OPENAI_API_KEY=
 ```
 
-`DISCORD_TOKEN` is required to start the bot. `OPENAI_API_KEY` is optional; without it, the bot can start but will not send images to the OpenAI API for scam classification.
+`DISCORD_TOKEN` is required to start the bot. `OPENAI_API_KEY` is optional. Without it, the image guard still examines image attachments locally and writes diagnostic logs, but it does not send images to OpenAI. To turn the guard off, set `SCAM_IMAGE_GUARD_ENABLED = False` in `config/moderation_config.py`.
 
 Optional environment variables include:
 
@@ -103,38 +103,37 @@ Optional environment variables include:
 
 ## Data and privacy
 
-The bot stores levels, check-ins, currency, shop records, Avalon state, private-room state, and related data in local SQLite files. These files are created in the project root at runtime, including names such as `levels.db`, `currency.db`, `checkin.db`, `shop.db`, and `avalon.db`. They are ignored by `.gitignore`.
+The bot stores levels, check-ins, currency, shop records, Avalon state, private-room state, and related data in local SQLite files. Database paths are relative to the process's working directory. If you run `python bot.py` from the repository root, files such as `levels.db`, `currency.db`, `checkin.db`, `shop.db`, and `avalon.db` are created there. Some are initialized at startup; others are created when their features are first used. The repository's `.gitignore` excludes `*.db` files.
 
-Do not commit databases, logs, backups, or user activity reports. In production, configure a backup directory outside the Git working tree and verify that it is not being tracked.
+The bot attempts a database backup before its daily 05:00 restart, using the host's local time. By default, backups are saved under `db_backups/` in the repository and excluded by `.gitignore`. Set `DB_BACKUP_ROOT` to a directory outside the repository for production. If backup fails, that day's restart is canceled. Keep database files, backup copies, logs, and exported activity reports out of public commits; `.gitignore` does not remove files already tracked by Git.
 
 ### Image scam moderation
 
-If an `OPENAI_API_KEY` is configured, image attachments in monitored channels are downloaded, resized, converted to JPEG, and sent to the OpenAI API for classification. Image content is not anonymized before transmission. A matching message may be deleted, its author may be temporarily timed out, and recent messages may be cleaned up. Review your server's privacy policy and grant the bot the required permissions before enabling this feature. By default, the monitored-channel list is empty, which covers all channels except any explicitly excluded channels.
+`SCAM_IMAGE_GUARD_ENABLED` is `True` by default. For non-bot messages with image attachments, the guard checks the configured channel scope, downloads eligible images, and converts them to JPEG. With an API key it sends the converted image to OpenAI for classification; visible content is not anonymized. Without an API key it does not send the image to OpenAI, but local downloading and diagnostic logging still occur. A positive result can delete the triggering message, time out its author, and remove recent messages where the bot has permission. The default empty `MOD_WATCH_CHANNEL_IDS` list covers all channels except those in `MOD_EXCLUDE_CHANNEL_IDS`. Set `SCAM_IMAGE_GUARD_ENABLED = False` to disable this image path, or configure a limited watch list before deployment. The logs include message, user, and channel IDs and attachment metadata.
 
-The included economy uses local SQLite databases. External MySQL integration, cross-bot transfers, database import tools, and avatar segmentation are not available in this repository.
 
 ## Common commands
 
-The following commands are available to regular members:
+Examples of member commands (some have additional conditions):
 
 | Command | Description |
 | --- | --- |
-| `&帮助` | Show commands available to the current account |
+| `&帮助` | Show the built-in command menu |
 | `&rank` | Show your level |
-| `&签到` | Check in for the day |
+| `&签到` | Check in for the day when no check-in event has locked this command |
 | `&签到天数` | Show check-in streak information |
 | `&签到排行` | Show the check-in leaderboard |
 | `&成就` | Show achievement progress |
 | `&晶核余额` | Show your currency balance |
 | `&兑换晶核 类型 数量` | Exchange XP for currency |
-| `&转账晶核 @成员 数量` | Transfer currency to a member |
+| `&转账晶核 @成员 数量` | Transfer currency to a member after reaching total level 5 |
 | `&商店` | Open the shop |
 | `&购买 商品名` | Purchase an item |
 | `&阿瓦隆` | Create an Avalon game |
 | `&阿瓦隆规则` | Show the Avalon rules |
 | `&OMG` + image | Analyze an OMG skill screenshot |
 
-Administrative commands are shown by `&帮助` according to Discord administrator permissions or the configured management roles. They include drop controls, role checks, private-room checks, XP/currency adjustments, achievement management, and event management.
+The `&帮助` menu shows different command groups according to Discord administrator permissions or the configured management role. It is not an exhaustive list; additional game and event commands are implemented outside that menu.
 
 ## Testing
 
@@ -150,6 +149,8 @@ Before using the bot in production, test it in a separate Discord server and ver
 ## Project scope
 
 This is source code for a self-hosted Discord bot. Configure its channels, roles, permissions, and privacy settings for your server before use.
+
+The economy uses local SQLite storage. This repository does not include remote database synchronization, cross-bot economy features, or avatar screening.
 
 For vulnerability reports and guidance on sharing diagnostic information, see [SECURITY.md](SECURITY.md).
 
@@ -177,7 +178,7 @@ This repository does not currently include a `LICENSE` file. Public visibility d
 - **游戏功能**：阿瓦隆创建、测试、战绩和排行。
 - **内容处理**：OMG 选技截图分析和可选的 OpenAI 图片反诈审查。
 
-默认指令前缀为 `&`，可在 Discord 中使用 `&帮助` 或 `&菜单` 查看当前账号可用的指令。
+默认指令前缀为 `&`。可在 Discord 中使用 `&帮助` 或 `&菜单` 查看内置指令菜单；菜单并未列出全部指令。
 
 ## 运行环境
 
@@ -254,7 +255,7 @@ DISCORD_TOKEN=
 OPENAI_API_KEY=
 ```
 
-`DISCORD_TOKEN` 是启动所必需的。`OPENAI_API_KEY` 是可选项；未填写时机器人仍可启动，但不会把图片发送到 OpenAI API 做诈骗分类。
+`DISCORD_TOKEN` 是启动所必需的。`OPENAI_API_KEY` 是可选项。未填写时，图片审查模块仍会在本地读取图片附件并写入诊断日志，但不会将图片发送到 OpenAI。要关闭该模块，请在 `config/moderation_config.py` 中将 `SCAM_IMAGE_GUARD_ENABLED` 设为 `False`。
 
 其他可选环境变量：
 
@@ -264,38 +265,37 @@ OPENAI_API_KEY=
 
 ## 数据与隐私
 
-机器人默认使用本地 SQLite 保存等级、签到、晶核、商店、阿瓦隆、私房状态等数据。数据库会在项目根目录运行时自动创建，文件名包括 `levels.db`、`currency.db`、`checkin.db`、`shop.db` 和 `avalon.db` 等，并已被 `.gitignore` 忽略。
+机器人使用本地 SQLite 保存等级、签到、晶核、商店、阿瓦隆、私房状态等数据。数据库路径相对于启动进程时的工作目录；如果在仓库根目录执行 `python bot.py`，`levels.db`、`currency.db`、`checkin.db`、`shop.db` 和 `avalon.db` 等文件会在那里生成。一部分在启动时初始化，其余在首次使用对应功能时创建。仓库的 `.gitignore` 会忽略 `*.db` 文件。
 
-不要将数据库、日志、备份或用户活跃报告提交到公开仓库。生产环境请将备份目录放在 Git 工作区之外，并确认没有被 Git 跟踪。
+机器人会在每天按主机本地时间 05:00 重启前尝试备份数据库。默认备份到仓库内被 `.gitignore` 忽略的 `db_backups/`；生产部署可通过 `DB_BACKUP_ROOT` 指向仓库外的目录。备份失败会取消当次重启。不要公开提交数据库、备份、日志或导出的活跃报告；`.gitignore` 不会自动移除已经被 Git 跟踪的文件。
 
 ### 图片反诈审查
 
-配置 `OPENAI_API_KEY` 后，受监控频道中的图片附件会被下载、缩放、转换为 JPEG，并发送到 OpenAI API 分类。发送前不会对图片内容做匿名化处理。命中规则的消息可能被删除，发送者可能被临时禁言，近期消息也可能被清理。启用前请确认符合服务器隐私政策，并授予机器人所需权限。默认监控频道列表为空，表示覆盖所有未被明确排除的频道。
+`SCAM_IMAGE_GUARD_ENABLED` 默认是 `True`。对于非机器人发送的带图消息，模块会检查频道范围、下载符合条件的图片并转换为 JPEG。配置 API Key 后，转换后的图片会发送到 OpenAI 分类，图片中的可见内容不会匿名化。没有 API Key 时不会发送图片，但仍会发生本地下载和诊断日志记录。判为命中后，机器人可能删除该消息、临时禁言发送者，并在权限允许的频道清理近期消息。默认空的 `MOD_WATCH_CHANNEL_IDS` 列表表示监控所有未列入 `MOD_EXCLUDE_CHANNEL_IDS` 的频道。部署前可将 `SCAM_IMAGE_GUARD_ENABLED` 设为 `False`，或配置仅监控指定频道。日志会包含消息、用户、频道 ID 和附件元数据。
 
-仓库内的经济系统使用本地 SQLite 数据库；不提供外部 MySQL 对接、跨机器人转账、数据库导入工具或头像分割功能。
 
 ## 常用指令
 
-普通成员可使用：
+以下是成员指令示例，部分指令还有额外使用条件：
 
 | 指令 | 作用 |
 | --- | --- |
-| `&帮助` | 查看当前账号可用的指令 |
+| `&帮助` | 查看内置指令菜单 |
 | `&rank` | 查看自己的等级 |
-| `&签到` | 每日签到 |
+| `&签到` | 未被签到活动锁定时进行每日签到 |
 | `&签到天数` | 查看连续签到信息 |
 | `&签到排行` | 查看签到排行 |
 | `&成就` | 查看成就进度 |
 | `&晶核余额` | 查看晶核余额 |
 | `&兑换晶核 类型 数量` | 用经验兑换晶核 |
-| `&转账晶核 @成员 数量` | 向成员转账晶核 |
+| `&转账晶核 @成员 数量` | 总等级达到 5 级后向成员转账晶核 |
 | `&商店` | 打开商店 |
 | `&购买 商品名` | 购买商品 |
 | `&阿瓦隆` | 创建阿瓦隆游戏 |
 | `&阿瓦隆规则` | 查看阿瓦隆规则 |
 | `&OMG` + 图片 | 分析 OMG 选技截图 |
 
-管理员指令会根据 Discord 管理员权限或配置的管理身份组显示在 `&帮助` 中，包括掉落控制、等级组巡检、私房巡检、经验/晶核调整、成就管理和活动管理等。
+`&帮助` 会根据 Discord 管理员权限或配置的管理身份组显示不同指令组，但不是完整指令清单；游戏和活动等模块还有未列入该菜单的指令。
 
 ## 测试
 
@@ -311,6 +311,8 @@ python -m pytest
 ## 项目范围
 
 这是一个可自行托管的 Discord 机器人源码项目。使用前请按照自己服务器的频道、身份组、权限和隐私要求完成配置。
+
+经济系统使用本地 SQLite；仓库不包含远程数据库同步、跨机器人经济功能或头像审查。
 
 漏洞报告方式及分享诊断信息时的注意事项，请参阅 [SECURITY.md](SECURITY.md)。
 

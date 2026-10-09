@@ -12,7 +12,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 DATABASE_BACKUP_ROOT = Path(
     os.getenv(
         "DB_BACKUP_ROOT",
-        str((Path("E:/") / "数据库备档") if os.name == "nt" else (PROJECT_ROOT / "db_backups")),
+        str(PROJECT_ROOT / "db_backups"),
     )
 )
 DATABASE_BACKUP_RETENTION_DAYS = int(os.getenv("DB_BACKUP_RETENTION_DAYS", "30"))

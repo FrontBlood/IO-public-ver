@@ -7,6 +7,7 @@ from database.dao_user import get_or_create_user, update_user
 from database.daily_limit import can_gain_xp
 from services.xp_tracker import apply_xp_and_check_level, get_level_from_xp
 from config.constants import ANNOUNCE_CHANNEL_ID
+from config.moderation_config import SCAM_IMAGE_GUARD_ENABLED
 from discord.ext import tasks
 from services.voice_stream_tasks import start_periodic_tasks, start_decay_loop
 import discord
@@ -61,7 +62,7 @@ def register_events(bot, decay_hour=5, decay_minute=0):
             except Exception:
                 return
 
-        if has_image_attachment(message):
+        if SCAM_IMAGE_GUARD_ENABLED and has_image_attachment(message):
             bot.loop.create_task(moderate_image_message_later(message))
 
         await process_message(message)
